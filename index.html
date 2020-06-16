@@ -9,12 +9,27 @@
 </head>
 
 <body>
-    <h1 class="time"></h1>
-    <p class="main">Game over</p>
-    <div id="main"></div>
-    <button class="btn">
-        Start Quiz <span class="badge badge-primary"></span>
-    </button>
+
+    <h2 style="text-align: center;">Aviz Trivia
+    </h2>
+    <div class="row" id="questions" style="text-align: center;">Questions </div>
+    <button id="start" onclick="showCounter()">Start quiz</button>
+
+
+    <div id="counter"></div>
+    <div id="quiz"></div>
+    <button class="btn" id="A" onclick="checkAnswer('A')" style="display: none;"></button>
+    <button class="btn" id="B" onclick="checkAnswer('B')" style="display: none;"></button>
+    <button class="btn" id="C" onclick="checkAnswer('C')" style="display: none;"></button>
+    <button class="btn" id="D" onclick="checkAnswer('D')" style="display: none;"></button>
+
+    <div id="tScore">TotalScore</div>
+
+
+    <!-- <div class="row" id="choices"></div> -->
+
+
+
     <script src="script.js"></script>
 </body>
 
