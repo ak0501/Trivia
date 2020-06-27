@@ -70,10 +70,11 @@ var totalScore = 0;
 // Bank of question objects
 var questionIndex = 0;
 // each question time
-var quizTime = 60;
+// var quizTime = 60;
 // initial starting countup time
-let countup = 0;
+let countdown = 60;
 let timer;
+let player;
 // last question value (in our case question.length = 5 )
 const lastQuestion = questions.length - 1;
 // Functions
@@ -98,6 +99,7 @@ start.addEventListener("click", startQuiz);
 function startQuiz() {
     console.log("click here");
     start.style.display = "none";
+    player = prompt("Your name");
     showQuestion();
     quiz.style.display = "block";
     choiceA.style.display = "block";
@@ -105,7 +107,7 @@ function startQuiz() {
     choiceC.style.display = "block";
     choiceD.style.display = "block";
     showCounter();
-    timer = setInterval(showCounter, 1000); // 1000ms = 1s
+    timer = setInterval(showCounter, 1000); // 1000ms = 1s  
 }
 
 // Question Counter. Each question has 10 seconds to answer. If the timer times-out , quiz will skip to the next question
@@ -113,20 +115,13 @@ function startQuiz() {
 // If the question index is less than the value of the last question; the quiz moves to the next question.
 // When do you show the counter? when the button is clicked or the game is restarted
 function showCounter() {
-    if (countup <= quizTime) {
-        counter.innerHTML = countup;
-        countup++
-    } else {
-        countup = 0;
-        if (questionIndex < lastQuestion) {
-            questionIndex++;
-            showQuestion();
-        } else {
-
-
-            // clearInterval(timer);
-
-        }
+    if (countdown > 0) {
+        counter.innerHTML = countdown;
+        countdown--
+        // if (questionIndex < lastQuestion) {
+        //     questionIndex++;
+        //     showQuestion();
+        // }
     }
 }
 
@@ -161,10 +156,20 @@ function checkAnswer(answer) {
         showQuestion();
     } else {
         // end the quiz and show the score
-        var scoreHolder = document.getElementById('tScore');
-        scoreHolder.innerHTML = score;
-        start.style.display = "block";
 
+        scoreDiv.innerHTML = score;
+        start.style.display = "block";
+        clearInterval(timer);
+        localStorage.setItem(player, score);
+        quiz.style.display = "block";
+        choiceA.style.display = "none";
+        choiceB.style.display = "none";
+        choiceC.style.display = "none";
+        choiceD.style.display = "none";
+        question.innerHTML = "";
+        start.style.display = "block";
+        countdown = 60;
+        counter.style.display = "none";
 
     }
 }
@@ -176,21 +181,12 @@ function restartQuiz() {
     // Reset the timer to 0
     // reset the score to 0
     showQuestion(questions[0]);
-    clearInterval(timer);
+
     clearInterval(score);
-    quiz.style.display = "none";
-    choiceA.style.display = "none";
-    choiceB.style.display = "none";
-    choiceC.style.display = "none";
-    choiceD.style.display = "none";
-    question.innerHTML = "";
-    start.style.display = "block";
+
 
 }
-restartQuiz();
 
-window.localStorage.setItem("score", score)
-window.localStorage.getItem(score)
 // save the score and show the score
 // save the highscore in the local storage
 //Reset the score and reset quiz 
