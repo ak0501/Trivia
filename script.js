@@ -1,4 +1,5 @@
-// Defining the variables to be used
+/* ---------------------------- variable for DOM ---------------------------- */
+
 const start = document.getElementById("start");
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("questions");
@@ -7,7 +8,9 @@ const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
 const choiceD = document.getElementById("D");
 const counter = document.getElementById("counter");
-const scoreDiv = document.getElementById("tscore");
+const scoreDiv = document.getElementById("tScore");
+
+/* ----------------------------------- end ---------------------------------- */
 
 // -----------------------Multiple Choice Questions----------------------------- 
 
@@ -53,10 +56,13 @@ let questions = [{
         choiceB: "Tiger",
         choiceC: "Antelope",
         choiceD: "Jaguar",
-        Answer: choiceA
+        Answer: "Cheetah"
     }
 
 ];
+
+/* ----------------------------------- end ---------------------------------- */
+
 // -----------------------Multiple Choice Questions----------------------------- 
 
 
@@ -72,16 +78,19 @@ var questionIndex = 0;
 // each question time
 // var quizTime = 60;
 // initial starting countup time
-let countdown = 60;
+let countdown = 10;
 let timer;
 let player;
 // last question value (in our case question.length = 5 )
 const lastQuestion = questions.length - 1;
 // Functions
 
-// First the questions need to be rendered on the page
-// Function to render the first question on the page
+/* ----------------------------------- end ---------------------------------- */
+
+/* ----------------- Function to render question on the page ---------------- */
+
 function showQuestion() {
+    countdown = 10;
     let q = questions[questionIndex];
     question.innerHTML = q.question;
     choiceA.innerHTML = q.choiceA;
@@ -95,69 +104,92 @@ function showQuestion() {
 // Start the quiz when button is clicked. Hide the "start Quiz" button and show the questions with options
 start.addEventListener("click", startQuiz);
 
+/* ------------------------- start quiz funtion/prompt name/ ------------------------ */
 
 function startQuiz() {
     console.log("click here");
     start.style.display = "none";
     player = prompt("Your name");
-    showQuestion();
-    quiz.style.display = "block";
-    choiceA.style.display = "block";
-    choiceB.style.display = "block";
-    choiceC.style.display = "block";
-    choiceD.style.display = "block";
-    showCounter();
-    timer = setInterval(showCounter, 1000); // 1000ms = 1s  
-}
+    counter.style.display = "block";
+    score = 0;
+    /* ----------------------------------- end ---------------------------------- */
 
-// Question Counter. Each question has 10 seconds to answer. If the timer times-out , quiz will skip to the next question
-// If the count is less than the question time; the counter increases by 1 until it reaches 10 seconds and resets
-// If the question index is less than the value of the last question; the quiz moves to the next question.
-// When do you show the counter? when the button is clicked or the game is restarted
-function showCounter() {
-    if (countdown > 0) {
-        counter.innerHTML = countdown;
-        countdown--
-        // if (questionIndex < lastQuestion) {
-        //     questionIndex++;
-        //     showQuestion();
-        // }
+    // questionIndex = 0;
+
+    // this line I want to write "if the player's name is empty ; then ask for name else move to
+    //showing the next question"
+
+    /* ------------------------------ showQuestion ------------------------------ */
+
+    if (player) {
+        // counter.style.display = "none";
+        showQuestion();
+        quiz.style.display = "block";
+        choiceA.style.display = "block";
+        choiceB.style.display = "block";
+        choiceC.style.display = "block";
+        choiceD.style.display = "block";
+        showCounter();
+        timer = setInterval(showCounter, 1000); // 1000ms = 1s  
+    } else {
+        start.style.display = "block";
+
+        alert("please add a name");
+        console.log("name");
+
     }
 }
 
+/* ----------------------------------- end ---------------------------------- */
+
+/* ----------------------------- game countdown ----------------------------- */
+
+function showCounter() {
+    if (countdown > 0) {
+        counter.innerHTML = countdown;
+        countdown--;
+    } else if (countdown === 0) {
+        questionIndex++;
+        showQuestion();
+        // countdown = 10;
+    }
+
+    // if (questionIndex < lastQuestion) {
+    //     questionIndex++;
+    //     showQuestion();
+    // }
+}
+
+
+/* ----------------------------------- end ---------------------------------- */
+
 // Check if the answer is correct or not.
 // If the answer is correct , keep track of the score 
-// Code is partially working. Need debugging. I couldnt not figure out.
 var answer;
 
-// // Check of the answer is correct
-// function correctAnswer({
-//     //
-// })
-
+/* ------------------------------ check answer ------------------------------ */
 
 
 function checkAnswer(answer) {
-    console.log(event.target.innerHTML);
+    // console.log(event.target.innerHTML);
     if (event.target.innerHTML == questions[questionIndex].Answer) {
         // answer is correct
         score++;
         console.log(score);
     } else {
         showQuestion();
-        // count = 0;
-        // answer is wrong
     }
 
-    // This moves to a new 
+    /* --------------------------- This moves to a new question-------------------------- */
 
     if (questionIndex < lastQuestion) {
         questionIndex++;
         showQuestion();
     } else {
         // end the quiz and show the score
+        // Add name of the player to the homepage
 
-        scoreDiv.innerHTML = score;
+        scoreDiv.innerHTML = "total score:" + score;
         start.style.display = "block";
         clearInterval(timer);
         localStorage.setItem(player, score);
@@ -168,38 +200,22 @@ function checkAnswer(answer) {
         choiceD.style.display = "none";
         question.innerHTML = "";
         start.style.display = "block";
-        countdown = 60;
+        countdown = 10;
         counter.style.display = "none";
+        questionIndex = 0;
+
+        // storage.getItem(player)
+        console.log(localStorage["<entries>"]);
+        delete localStorage.length;
+        Object.keys(localStorage).forEach(function (item) {
+            document.getElementById('nameScore').innerHTML = document.getElementById('nameScore').innerHTML + "<p>" + item + " ; " + localStorage[item] + "</p>";
+        });
+
+
+
+
+
+
 
     }
 }
-
-
-// write a restart quiz function
-function restartQuiz() {
-    // you need to go to the first question
-    // Reset the timer to 0
-    // reset the score to 0
-    showQuestion(questions[0]);
-
-    clearInterval(score);
-
-
-}
-
-// save the score and show the score
-// save the highscore in the local storage
-//Reset the score and reset quiz 
-//Display the high score
-// Write the name 
-// GIVEN I am taking a code quiz
-// WHEN I click the start button
-// THEN a timer starts and I am presented with a question
-// WHEN I answer a question
-// THEN I am presented with another question
-// WHEN I answer a question incorrectly
-// THEN time is subtracted from the clock
-// WHEN all questions are answered or the timer reaches 0
-// THEN the game is over
-// WHEN the game is over
-// THEN I can save my initials and score
